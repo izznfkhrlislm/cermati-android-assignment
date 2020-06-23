@@ -19,7 +19,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_launcher_foreground"
+            android:src="@drawable/round_account_circle_24"
             card_view:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
