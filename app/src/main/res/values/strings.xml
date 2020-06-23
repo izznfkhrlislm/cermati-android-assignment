@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Github Profile Search</string>
+    <string name="user_display_picture">User Display Picture</string>
+    <string name="github_username_placeholder">Username</string>
 </resources>
