@@ -7,6 +7,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+
 import androidx.appcompat.widget.SearchView;
 
 import com.cermati.recruitmentassignment.githubprofilesearch.R;
@@ -14,6 +17,7 @@ import com.cermati.recruitmentassignment.githubprofilesearch.R;
 public class MainActivity extends AppCompatActivity {
 
     FragmentManager mainActivityFm;
+    LinearLayout placeholderView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         mainActivityFm = getSupportFragmentManager();
+        placeholderView = findViewById(R.id.placeholderScreen);
     }
 
     @Override
@@ -43,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText != null && !newText.isEmpty()) {
+                    placeholderView.setVisibility(View.GONE);
                     FragmentTransaction mainActivityFt = mainActivityFm.beginTransaction();
                     mainActivityFt.replace(R.id.searchResultFragment, SelectUserFragment.newInstance(newText));
                     mainActivityFt.commit();

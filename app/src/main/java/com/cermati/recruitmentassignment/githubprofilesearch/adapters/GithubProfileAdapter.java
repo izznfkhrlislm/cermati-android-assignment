@@ -11,6 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.cermati.recruitmentassignment.githubprofilesearch.R;
 import com.cermati.recruitmentassignment.githubprofilesearch.model.GithubProfile;
 
@@ -67,7 +71,12 @@ public class GithubProfileAdapter extends RecyclerView.Adapter<GithubProfileAdap
             githubProfileUrlTv.setText(currentItem.getProfileUrl());
 
             ImageView githubAvatarIv = githubUserListView.findViewById(R.id.profilePictureImg);
-            Glide.with(context).load(currentItem.getAvatarUrl()).into(githubAvatarIv);
+            Glide.with(context)
+                    .load(currentItem.getAvatarUrl())
+                    .apply(new RequestOptions()
+                            .transforms(new CenterCrop(), new CircleCrop())
+                    ).into(githubAvatarIv);
+
         }
     }
 
