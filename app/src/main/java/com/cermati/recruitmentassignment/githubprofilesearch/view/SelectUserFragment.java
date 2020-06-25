@@ -5,7 +5,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +44,7 @@ public class SelectUserFragment extends Fragment {
     View loadingAnimationView;
     View errorMessageView;
     TextView errorMessageText;
+    ToggleButton favoriteToggleBtn;
 
     public SelectUserFragment() {
         super();
@@ -65,6 +71,9 @@ public class SelectUserFragment extends Fragment {
         errorMessageView = fragmentView.findViewById(R.id.errorMessage);
         errorMessageView.setVisibility(View.GONE);
         errorMessageText = fragmentView.findViewById(R.id.errorMessageText);
+
+        favoriteToggleBtn = fragmentView.findViewById(R.id.favoriteToggleBtn);
+        setupToggleButtonAnimation(favoriteToggleBtn);
 
         viewModel = new ViewModelProvider(this).get(GithubProfileViewModel.class);
         loadingAnimationView.setVisibility(View.VISIBLE);
@@ -109,6 +118,24 @@ public class SelectUserFragment extends Fragment {
             selectUserRv.setItemAnimator(new DefaultItemAnimator());
         } else {
             adapter.notifyDataSetChanged();
+        }
+    }
+
+    private void setupToggleButtonAnimation(ToggleButton toggleButton) {
+        final ScaleAnimation scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f,
+                1.0f, Animation.RELATIVE_TO_SELF, 0.7f,
+                Animation.RELATIVE_TO_SELF, 0.7f);
+        scaleAnimation.setDuration(500);
+        BounceInterpolator bounceInterpolator = new BounceInterpolator();
+        scaleAnimation.setInterpolator(bounceInterpolator);
+
+        if (toggleButton != null) {
+            toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    buttonView.startAnimation(scaleAnimation);
+                }
+            });
         }
     }
 }
