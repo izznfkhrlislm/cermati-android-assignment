@@ -30,6 +30,7 @@ public class SelectUserFragment extends Fragment {
     private static final String QUERY_PARAMETER_ARGS_KEY = "queryParameter";
     private static final int STATUS_CODE_RATE_LIMIT_EXCEEDED = 403;
     private static final int STATUS_CODE_INTERNAL_SERVER_ERROR = 500;
+    private static final int STATUS_CODE_OK = 200;
 
     List<GithubProfile> githubProfileList = new ArrayList<>();
     GithubProfileAdapter adapter;
@@ -73,12 +74,11 @@ public class SelectUserFragment extends Fragment {
             @Override
             public void onChanged(SearchResult searchResult) {
                 loadingAnimationView.setVisibility(View.GONE);
-                if (searchResult.getGithubProfiles() != null && searchResult.getStatusCode() == 200) {
+                if (searchResult.getGithubProfiles() != null && searchResult.getStatusCode() == STATUS_CODE_OK) {
                     if (errorMessageView.getVisibility() == View.VISIBLE) {
                         errorMessageView.setVisibility(View.GONE);
                     }
                     githubProfileList.addAll(searchResult.getGithubProfiles());
-
                 } else {
                     String errorMessage = "";
                     errorMessageView.setVisibility(View.VISIBLE);
