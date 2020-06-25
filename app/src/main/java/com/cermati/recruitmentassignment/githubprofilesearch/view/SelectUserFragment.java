@@ -1,9 +1,11 @@
 package com.cermati.recruitmentassignment.githubprofilesearch.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cermati.recruitmentassignment.githubprofilesearch.R;
 import com.cermati.recruitmentassignment.githubprofilesearch.adapters.GithubProfileAdapter;
 import com.cermati.recruitmentassignment.githubprofilesearch.model.GithubProfile;
+import com.cermati.recruitmentassignment.githubprofilesearch.model.SearchResult;
 import com.cermati.recruitmentassignment.githubprofilesearch.viewmodel.GithubProfileViewModel;
 
 import java.util.ArrayList;
@@ -25,15 +28,19 @@ import java.util.List;
 public class SelectUserFragment extends Fragment {
 
     private static final String QUERY_PARAMETER_ARGS_KEY = "queryParameter";
+    private static final int STATUS_CODE_RATE_LIMIT_EXCEEDED = 403;
+    private static final int STATUS_CODE_INTERNAL_SERVER_ERROR = 500;
 
     List<GithubProfile> githubProfileList = new ArrayList<>();
     GithubProfileAdapter adapter;
     GithubProfileViewModel viewModel;
     RecyclerView selectUserRv;
     View loadingAnimationView;
+    View errorMessageView;
+    TextView errorMessageText;
 
     public SelectUserFragment() {
-
+        super();
     }
 
     public static SelectUserFragment newInstance(String queryParameter) {
@@ -49,21 +56,42 @@ public class SelectUserFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View fragmentView = inflater.inflate(
+        final View fragmentView = inflater.inflate(
                 R.layout.select_user_fragment, container, false);
 
         selectUserRv = fragmentView.findViewById(R.id.selectUserFragmentRv);
         loadingAnimationView = fragmentView.findViewById(R.id.loadingAnimationView);
+        errorMessageView = fragmentView.findViewById(R.id.errorMessage);
+        errorMessageView.setVisibility(View.GONE);
+        errorMessageText = fragmentView.findViewById(R.id.errorMessageText);
 
         viewModel = new ViewModelProvider(this).get(GithubProfileViewModel.class);
         loadingAnimationView.setVisibility(View.VISIBLE);
+
         viewModel.init(getActivity().getApplication(), getArguments().getString(QUERY_PARAMETER_ARGS_KEY));
-        viewModel.getMutableLiveData().observe(getViewLifecycleOwner(), new Observer<List<GithubProfile>>() {
+        viewModel.getSearchResultMutableLiveData().observe(getViewLifecycleOwner(), new Observer<SearchResult>() {
             @Override
-            public void onChanged(List<GithubProfile> githubProfiles) {
+            public void onChanged(SearchResult searchResult) {
                 loadingAnimationView.setVisibility(View.GONE);
-                if (githubProfiles != null) {
-                    githubProfileList.addAll(githubProfiles);
+                if (searchResult.getGithubProfiles() != null && searchResult.getStatusCode() == 200) {
+                    if (errorMessageView.getVisibility() == View.VISIBLE) {
+                        errorMessageView.setVisibility(View.GONE);
+                    }
+                    githubProfileList.addAll(searchResult.getGithubProfiles());
+
+                } else {
+                    String errorMessage = "";
+                    errorMessageView.setVisibility(View.VISIBLE);
+                    switch (searchResult.getStatusCode()) {
+                        case STATUS_CODE_RATE_LIMIT_EXCEEDED:
+                            errorMessage = getString(R.string.error_message, "403", "Rate Limit Exceeded");
+                            break;
+                        case STATUS_CODE_INTERNAL_SERVER_ERROR:
+                            errorMessage = getString(R.string.error_message, "500", "Internal Server Error");
+                            break;
+                    }
+                    errorMessageText.setText(errorMessage);
+                    Log.e("SearchUserFragment", errorMessage);
                 }
                 adapter.notifyDataSetChanged();
             }

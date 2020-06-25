@@ -8,4 +8,5 @@
     <string name="search_title">Search</string>
     <string name="search_placeholder">"Search GitHub Username here..."</string>
     <string name="search_instruction_placeholder">Tap the search icon on action bar to find GitHub user!</string>
+    <string name="error_message" formatted="true">An error occured. Error code: %1$s %2$s.</string>
 </resources>

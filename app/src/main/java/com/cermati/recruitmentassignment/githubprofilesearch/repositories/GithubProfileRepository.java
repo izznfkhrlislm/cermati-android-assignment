@@ -22,9 +22,11 @@ import retrofit2.Response;
 
 public class GithubProfileRepository {
 
+    private static final int STATUS_CODE_INTERNAL_SERVER_ERROR = 500;
+
     private GithubProfileDao githubProfileDao;
     private LiveData<List<GithubProfile>> allGithubProfiles;
-    private ApiCallUtils.ApiInterface apiInterface;
+    private LiveData<SearchResult> fetchedSearchResult;
 
     public GithubProfileRepository(Application application) {
         GithubProfileDatabase database = GithubProfileDatabase.getInstance(application);
@@ -44,33 +46,33 @@ public class GithubProfileRepository {
         new DeleteAllFetchedGithubProfileAsyncTask(githubProfileDao).execute();
     }
 
-    public LiveData<List<GithubProfile>> getAllGithubProfiles() {
-        return allGithubProfiles;
+    public LiveData<SearchResult> getFetchedSearchResult() {
+        return fetchedSearchResult;
     }
 
-    public MutableLiveData<List<GithubProfile>> getGithubProfileListFromAPI(String username) {
-        final MutableLiveData<List<GithubProfile>> responseData = new MutableLiveData<>();
-        apiInterface = ApiCallUtils.getApiInterfaceInstance();
+    public MutableLiveData<SearchResult> getSearchResultFromAPI(String username) {
+        final MutableLiveData<SearchResult> responseData = new MutableLiveData<>();
+        ApiCallUtils.ApiInterface apiInterface = ApiCallUtils.getApiInterfaceInstance();
+
         Call<SearchResult> apiCall = apiInterface.getGithubUserProfileByUsername(username);
         apiCall.enqueue(new Callback<SearchResult>() {
+            SearchResult responseModel;
             @Override
             public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
                 if (response.isSuccessful()) {
-                    Log.i("Get from Github API", response.body().toString());
-                    responseData.setValue(response.body().getGithubProfiles());
+                    responseModel = response.body();
                 } else {
-                    try {
-                        Log.e("Request URL", call.request().url().toString());
-                        Log.e("Get from Github API", response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    responseModel = new SearchResult();
                 }
+                responseModel.setStatusCode(response.code());
+                responseData.setValue(responseModel);
             }
 
             @Override
             public void onFailure(Call<SearchResult> call, Throwable t) {
-                responseData.setValue(null);
+                responseModel = new SearchResult();
+                responseModel.setStatusCode(STATUS_CODE_INTERNAL_SERVER_ERROR);
+                responseData.setValue(responseModel);
             }
         });
 

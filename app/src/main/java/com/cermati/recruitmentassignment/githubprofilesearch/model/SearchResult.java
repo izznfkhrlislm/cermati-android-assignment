@@ -16,6 +16,8 @@ public class SearchResult implements Serializable {
     @SerializedName("items")
     private List<GithubProfile> githubProfiles;
 
+    private Integer statusCode;
+
     public Integer getTotalCount() {
         return totalCount;
     }
@@ -30,5 +32,13 @@ public class SearchResult implements Serializable {
 
     public void setGithubProfiles(List<GithubProfile> githubProfiles) {
         this.githubProfiles = githubProfiles;
+    }
+
+    public Integer getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(Integer statusCode) {
+        this.statusCode = statusCode;
     }
 }

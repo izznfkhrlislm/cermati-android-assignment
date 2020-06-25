@@ -7,23 +7,24 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.cermati.recruitmentassignment.githubprofilesearch.model.GithubProfile;
+import com.cermati.recruitmentassignment.githubprofilesearch.model.SearchResult;
 import com.cermati.recruitmentassignment.githubprofilesearch.repositories.GithubProfileRepository;
 
 import java.util.List;
 
 public class GithubProfileViewModel extends ViewModel {
     private GithubProfileRepository repository;
-    private LiveData<List<GithubProfile>> fetchedGithubProfiles;
-    private MutableLiveData<List<GithubProfile>> mutableLiveData;
+    private LiveData<SearchResult> searchResult;
+    private MutableLiveData<SearchResult> searchResultMutableLiveData;
 
     public void init(Application application, String usernameQuery) {
         repository = new GithubProfileRepository(application);
-        fetchedGithubProfiles = repository.getAllGithubProfiles();
-        mutableLiveData = repository.getGithubProfileListFromAPI(usernameQuery);
+        searchResult = repository.getFetchedSearchResult();
+        searchResultMutableLiveData = repository.getSearchResultFromAPI(usernameQuery);
     }
 
-    public MutableLiveData<List<GithubProfile>> getMutableLiveData() {
-        return mutableLiveData;
+    public MutableLiveData<SearchResult> getSearchResultMutableLiveData() {
+        return searchResultMutableLiveData;
     }
 
     public void insert(GithubProfile githubProfile) {
@@ -38,7 +39,7 @@ public class GithubProfileViewModel extends ViewModel {
         repository.deleteAll();
     }
 
-    public LiveData<List<GithubProfile>> getFetchedGithubProfiles() {
-        return fetchedGithubProfiles;
+    public LiveData<SearchResult> getSearchResult() {
+        return searchResult;
     }
 }
