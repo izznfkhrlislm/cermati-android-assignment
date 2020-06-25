@@ -22,7 +22,7 @@ public abstract class GithubProfileDatabase extends RoomDatabase{
                     context.getApplicationContext(),
                     GithubProfileDatabase.class,
                     "github_profile_database"
-            ).fallbackToDestructiveMigration().build();
+            ).fallbackToDestructiveMigration().allowMainThreadQueries().build();
         }
 
         return instance;
