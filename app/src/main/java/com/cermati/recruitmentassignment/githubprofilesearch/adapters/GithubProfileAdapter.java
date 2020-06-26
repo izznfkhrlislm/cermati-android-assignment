@@ -27,12 +27,15 @@ import java.util.List;
 public class GithubProfileAdapter extends RecyclerView.Adapter<GithubProfileAdapter.GithubProfileViewHolder> {
 
     private List<GithubProfile> githubProfiles;
+    private List<GithubProfile> favoritedGithubUsers;
     private Context context;
     private Callable callable;
 
-    public GithubProfileAdapter(Context context, List<GithubProfile> githubProfiles, Callable callable) {
+    public GithubProfileAdapter(Context context, List<GithubProfile> githubProfiles,
+                                List<GithubProfile> favoritedGithubUsers, Callable callable) {
         this.context = context;
         this.githubProfiles = githubProfiles;
+        this.favoritedGithubUsers = favoritedGithubUsers;
         this.callable = callable;
     }
 
@@ -91,8 +94,7 @@ public class GithubProfileAdapter extends RecyclerView.Adapter<GithubProfileAdap
             BounceInterpolator bounceInterpolator = new BounceInterpolator();
             scaleAnimation.setInterpolator(bounceInterpolator);
             if (favoriteToggleBtn != null) {
-                //TODO: Find a way to dynamically mark toggle button!
-                favoriteToggleBtn.setChecked(true);
+                favoriteToggleBtn.setChecked(checkIfAlreadyFavorited(currentItem));
                 favoriteToggleBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -101,6 +103,18 @@ public class GithubProfileAdapter extends RecyclerView.Adapter<GithubProfileAdap
                     }
                 });
             }
+        }
+
+        public boolean checkIfAlreadyFavorited(GithubProfile currentData) {
+            boolean res = false;
+            for (GithubProfile favoritedProfile : favoritedGithubUsers) {
+                if (currentData.getUsername().equals(favoritedProfile.getUsername())) {
+                    res = true;
+                    break;
+                }
+            }
+
+            return res;
         }
     }
 

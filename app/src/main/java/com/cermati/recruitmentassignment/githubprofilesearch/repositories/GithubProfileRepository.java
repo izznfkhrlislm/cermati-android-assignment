@@ -14,6 +14,7 @@ import com.cermati.recruitmentassignment.githubprofilesearch.model.SearchResult;
 import com.cermati.recruitmentassignment.githubprofilesearch.utils.ApiCallUtils;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import retrofit2.Call;
 import retrofit2.Callback;

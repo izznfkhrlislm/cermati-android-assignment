@@ -50,6 +50,7 @@ public class FavoritedListActivity extends AppCompatActivity implements Callable
                 public void onChanged(List<GithubProfile> githubProfiles) {
                     if (!githubProfiles.isEmpty() && placeholderView.getVisibility() != View.GONE) {
                         placeholderView.setVisibility(View.GONE);
+                        favoritedGithubProfiles.clear();
                         favoritedGithubProfiles.addAll(githubProfiles);
                     } else {
                         placeholderView.setVisibility(View.VISIBLE);
@@ -58,14 +59,15 @@ public class FavoritedListActivity extends AppCompatActivity implements Callable
                 }
             });
             setupRecyclerView();
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void setupRecyclerView() {
         if (adapter == null) {
-            adapter = new GithubProfileAdapter(this, favoritedGithubProfiles, this);
+            adapter = new GithubProfileAdapter(this, favoritedGithubProfiles,
+                    favoritedGithubProfiles,this);
             favoritedUserRv.setLayoutManager(new LinearLayoutManager(this));
             favoritedUserRv.setAdapter(adapter);
             favoritedUserRv.setItemAnimator(new DefaultItemAnimator());

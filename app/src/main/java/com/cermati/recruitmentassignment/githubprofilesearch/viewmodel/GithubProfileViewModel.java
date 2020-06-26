@@ -31,7 +31,7 @@ public class GithubProfileViewModel extends ViewModel {
         return searchResultMutableLiveData;
     }
 
-    public LiveData<List<GithubProfile>> getFavoritedGithubProfiles() throws ExecutionException, InterruptedException {
+    public LiveData<List<GithubProfile>> getFavoritedGithubProfiles()  {
         return repository.getAll();
     }
 

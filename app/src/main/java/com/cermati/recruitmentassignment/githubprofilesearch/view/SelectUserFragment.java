@@ -111,7 +111,7 @@ public class SelectUserFragment extends Fragment implements Callable {
             });
             setupRecyclerView();
 
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -120,7 +120,8 @@ public class SelectUserFragment extends Fragment implements Callable {
 
     private void setupRecyclerView() {
         if (adapter == null) {
-            adapter = new GithubProfileAdapter(getContext(), fetchedGithubProfilesFromApi, this);
+            adapter = new GithubProfileAdapter(getContext(), fetchedGithubProfilesFromApi,
+                    favoritedGithubProfiles, this);
             selectUserRv.setLayoutManager(new LinearLayoutManager(getContext()));
             selectUserRv.setAdapter(adapter);
             selectUserRv.setItemAnimator(new DefaultItemAnimator());
@@ -135,13 +136,11 @@ public class SelectUserFragment extends Fragment implements Callable {
             viewModel.insert(githubProfile);
             Log.i("SelectUserFragment", "DAO insert Fragment!");
             Toast.makeText(getContext(), "User added to favorited list!", Toast.LENGTH_SHORT).show();
-            adapter.notifyDataSetChanged();
         } else {
             for (GithubProfile favoritedGithubProfile : favoritedGithubProfiles) {
                 if (favoritedGithubProfile.getUsername().equals(githubProfile.getUsername())) {
                     viewModel.delete(favoritedGithubProfile);
                     Toast.makeText(getContext(), "User removed from favorited list!", Toast.LENGTH_SHORT).show();
-                    adapter.notifyDataSetChanged();
                 }
             }
         }
