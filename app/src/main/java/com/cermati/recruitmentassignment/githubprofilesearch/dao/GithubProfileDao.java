@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Update;
 import androidx.room.Query;
+import androidx.room.Delete;
 
 import java.util.List;
 
@@ -19,9 +20,12 @@ public interface GithubProfileDao {
     @Update
     void update(GithubProfile githubProfile);
 
+    @Delete
+    void delete(GithubProfile githubProfile);
+
     @Query("DELETE FROM github_profiles")
     void deleteAllRetrievedProfiles();
 
-    @Query("SELECT * FROM github_profiles ORDER BY id")
-    LiveData<List<GithubProfile>> getAllRetrievedProfiles();
+    @Query("SELECT * FROM github_profiles")
+    LiveData<List<GithubProfile>> getFavoritedGithubProfiles();
 }

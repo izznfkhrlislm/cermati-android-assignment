@@ -7,45 +7,40 @@
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     android:layout_marginTop="5dp"
-    card_view:cardCornerRadius="10dp">
+    card_view:cardCornerRadius="10dp"
+    android:elevation="100dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/darker_gray">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/profilePictureImg"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_margin="8dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:src="@drawable/round_account_circle_24"
-            card_view:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            card_view:layout_constraintTop_toTopOf="parent"
-            android:layout_marginBottom="8dp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintVertical_bias="0.0"
             android:contentDescription="@string/user_display_picture"/>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:id="@+id/userInfoView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:orientation="vertical"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/linearLayoutCard"
-            card_view:layout_constraintStart_toEndOf="@+id/profilePictureImg"
-            android:layout_marginStart="8dp"
-            card_view:layout_constraintBottom_toBottomOf="parent">
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@id/profilePictureImg">
 
             <TextView
                 android:id="@+id/githubProfileUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="7dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/profilePictureImg"
                 android:text="@string/github_username_placeholder"
                 android:textColor="@android:color/black"
                 android:textSize="22sp"
@@ -55,14 +50,30 @@
                 android:id="@+id/githubProfileUrl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="7dp"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/profilePictureImg"
+                android:layout_below="@id/githubProfileUsername"
                 android:text="@string/github_profile_url_placeholder"
                 android:textColor="@android:color/black"
-                android:textSize="15sp"
-                android:textStyle="bold"/>
+                android:textSize="15sp"/>
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <ToggleButton
+            android:id="@+id/favoriteToggleBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop= "20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/button_favorite"
+            android:checked="false"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
+
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
